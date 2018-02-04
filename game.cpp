@@ -131,10 +131,13 @@ void game::initpicture()
     }
     return;
 }
+
+
 void game::initPosList()
 {
     for(int iCol = 0; iCol < 20; ++iCol)
         m_PosList.append(QPoint(iCol*40,0));
+    //the range of letters in the walls
     return ;
 }
 //初始化砖头列表
@@ -150,7 +153,7 @@ void game::initWallList()
 void game::checkCrash()
 {
     for(int i = 0; i< m_CharList.size(); ++i)
-        for(int j =0; j < m_WallList.size(); ++j)
+        for(int j =0; j <= m_WallList.size(); ++j)
         {
             int x1 = m_CharList.at(i).x;
             int y1 = m_CharList.at(i).y;
@@ -161,8 +164,13 @@ void game::checkCrash()
                 m_CharList.removeAt(i);
                 m_WallList.removeAt(j);
                 gScore -=5;
-                return;
+                    return;
             }
+           /* if(x1 < x2 || y1 < y2)
+            {
+                close();
+
+            }*/
         }
 }
 
@@ -179,6 +187,8 @@ void game::updateTime()                 //更新时间
 void game::updateScore()            //刷新显示分数
 {
     ui->scoreLcd->display(gScore);
+    if(gScore < -100)
+        close();
     return;
 }
 
