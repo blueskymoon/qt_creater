@@ -153,7 +153,7 @@ void game::initWallList()
 void game::checkCrash()
 {
     for(int i = 0; i< m_CharList.size(); ++i)
-        for(int j =0; j <= m_WallList.size(); ++j)
+        for(int j =0; j < m_WallList.size(); ++j)
         {
             int x1 = m_CharList.at(i).x;
             int y1 = m_CharList.at(i).y;
