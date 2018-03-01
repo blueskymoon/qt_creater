@@ -6,6 +6,8 @@ login::login(QWidget *parent) :
     ui(new Ui::login)
 {
     ui->setupUi(this);
+
+    //按键操作
     QObject::connect(ui->signButton,SIGNAL(clicked()),this,SLOT(signButtonSlot()));
     QObject::connect(ui->loginButton,SIGNAL(clicked()),this,SLOT(loginButtonSlot()));
     QObject::connect(ui->passWordLineEdit,SIGNAL(returnPressed()),this,SLOT(loginButtonSlot()));
@@ -16,9 +18,11 @@ login::login(QWidget *parent) :
 
 
     database = QSqlDatabase::addDatabase("QSQLITE");    //使用数据库SQLITE
-    database.setDatabaseName("game.db");       //设置数据库名称为game.db
+    database.setDatabaseName("gameone.db");       //设置数据库名称为game.db
 
-
+    //查找表game的项目"gm_user"
+    QString select_sql = "select game from gameone";
+    QString create_sql= "create table game (chatid int primary key,user varchar(30),passwd varchar(30),email varchar(30),history int )";
     //打开数据库
         if(!database.open())
         {
@@ -29,20 +33,21 @@ login::login(QWidget *parent) :
         {
             qDebug() << "open seccess";
             QSqlQuery sql_query;
-            sql_query.prepare(select_table);
-            if(!sql_query.exec())
+            sql_query.prepare(select_table);        //执行查找数据库的操作
+            if(!sql_query.exec())                   //判断是否能够执行
             {
-                qDebug() <<sql_query.lastError();
+                qDebug() <<sql_query.lastError();       //不能执行输出错误警告
 
             }
             else
             {
-                QString tableName;
-                while(sql_query.next())
+                QString tableName;                  //定义一个名字
+                while(sql_query.next())             //循环下一个数据库
                 {
-                    tableName = sql_query.value(0).toString();
-                    qDebug() << tableName;
-                    if(tableName.compare("gameone"))
+                    tableName = sql_query.value(0).toString();      //将数据库中序列为0的数据转换为string类型
+                                                                    //并赋值给tableName
+                    qDebug() << tableName;                          //在调试中输出tableName的数据
+                    if(tableName.compare("game"))                   //判断talbeName是否是"game"
                     {
                         tableFlag =false;
                         qDebug() << "table is not exist";
@@ -55,9 +60,9 @@ login::login(QWidget *parent) :
 
                 }
             }
-            if(tableFlag == false)
+            if(tableFlag == false)                  //判断为否
             {
-                sql_query.prepare(create_sql);
+                sql_query.prepare(create_sql);          //执行创建数据库
                 if(!sql_query.exec())
                 {
                     qDebug() << sql_query.lastError();
@@ -136,7 +141,7 @@ void login::getUserInfo(QString user)
 {
     QSqlQuery sql_query;
 
-    QString tempstring = "select * from gameone where user='"+user+"'";
+    QString tempstring = "select * from game where user='"+user+"'";
     //QString tempstring = sql_query.value(1).toString();
     qDebug() <<tempstring;
     qDebug() <<"error one...........";
@@ -158,8 +163,10 @@ void login::getUserInfo(QString user)
             qDebug() << QString("chatid =%1  user=%2  passwd =%3  email =%5  history =%4").arg(gm_id).arg(gm_user).arg(gm_passwd).arg(gm_email).arg(gm_history);
         }
     }
-        if(gm_user==user)   matchFlag=true;
-        else                matchFlag=false;
+        if(gm_user==user)
+            matchFlag=true;
+        else
+            matchFlag=false;
     }
 
 

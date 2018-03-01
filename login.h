@@ -2,11 +2,12 @@
 #define LOGIN_H
 
 #include <QWidget>
-#include "sign.h"
 #include "game.h"
+#include "sign.h"
 #include <QMessageBox>
 #include <QtSql>
 #include <QPainter>
+#include <qsql.h>
 
 
 namespace Ui {

@@ -4,7 +4,7 @@
 #include <QMessageBox>
 #include <QDebug>
 //声明它是一个外部变量
-extern int gScore;
+extern int gScore = 0;
 
 
 game::game(QWidget *parent) :

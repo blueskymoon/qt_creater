@@ -16,12 +16,18 @@ Sign::~Sign()
     delete ui;
 }
 
-QString select_table = "select tbl_name gameone from sqlite_master where type = 'user'";
+  QString create_sql= "create table game (chatid int primary key,user varchar(30),passwd varchar(30),email varchar(30),history int )";
+QString select_table = "select game from sqlite master where type = 'user'";
+QString select_max_sql = "select max(chatid) from game";
+QString insert_sql = "insert into game values (?,?,?,?,?)";     //插入向表game插入数据
+QString select_sql = "select game from gameone";       //查找数据库表game的user的
+/*
+QString select_table = "select gameone from sqlite_master where type = 'user'";
 QString create_sql = "create table gameone (chatid int primary key, user varchar(30),passwd varchar(30), email varchar(30), history int)";
 QString select_max_sql = "select max(chatid) from gameone";
 QString insert_sql = "insert into gameone values (?, ?, ?, ?,?)";
 QString select_sql = "select user from gameone";
-
+*/
 
 
 
@@ -54,6 +60,17 @@ void Sign::finishButtonSlot()           //完成键，写入数据库
 
     //数据库操作
     QSqlQuery sql_query;
+
+    sql_query.prepare(create_sql);
+    if(!sql_query.exec())
+    {
+        qDebug()<<sql_query.lastError();
+    }
+    else
+    {
+        qDebug()<<"table created";
+    }
+
 
     max_id = 0;
     sql_query.prepare(select_max_sql);
